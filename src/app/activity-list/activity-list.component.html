@@ -1,0 +1,56 @@
+<div class="content-wrapper">
+  <button class="btn-add">
+    <fa-icon
+      [icon]="faPlusCircle"
+      [styles]="{ stroke: 'blue', color: 'green' }"
+      size="2x"
+    ></fa-icon>
+  </button>
+
+  <table mat-table [dataSource]="dataSource" matSort>
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+      <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+    </ng-container>
+
+    <!-- Type Column -->
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+      <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <!-- Counselor Column -->
+    <ng-container matColumnDef="counselor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Counselor</th>
+      <td mat-cell *matCellDef="let element">{{ element.counselor }}</td>
+    </ng-container>
+
+    <!-- Time Column -->
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.time.toDate() | date: "full" }}
+      </td>
+    </ng-container>
+
+    <!-- URL Column -->
+    <ng-container matColumnDef="url">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>URL</th>
+      <td mat-cell *matCellDef="let element">{{ element.url }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="viewActivity(row)"
+    ></tr>
+  </table>
+</div>
