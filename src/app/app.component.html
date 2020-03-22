@@ -6,8 +6,12 @@
       mat-raised-button
       routerLink="activities"
       routerLinkActive="active"
-      >Items</a
-    >
+      ><fa-icon
+        [icon]="faHome"
+        [styles]="{ stroke: 'blue', color: 'blue' }"
+        size="2x"
+      ></fa-icon
+    ></a>
   </div>
   <span class="nav-tool-items">
     <h1 *ngIf="authenticationService.userData | async">
