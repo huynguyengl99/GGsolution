@@ -1,0 +1,31 @@
+[debug] [2020-03-22T06:32:44.104Z] ----------------------------------------------------------------------
+[debug] [2020-03-22T06:32:44.106Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2020-03-22T06:32:44.107Z] CLI Version:   7.3.0
+[debug] [2020-03-22T06:32:44.107Z] Platform:      darwin
+[debug] [2020-03-22T06:32:44.107Z] Node Version:  v10.16.3
+[debug] [2020-03-22T06:32:44.111Z] Time:          Sun Mar 22 2020 13:32:44 GMT+0700 (Indochina Time)
+[debug] [2020-03-22T06:32:44.111Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-03-22T06:32:44.131Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-22T06:32:44.132Z] > authorizing via signed-in user
+[debug] [2020-03-22T06:32:44.132Z] [iam] checking project shareapy-a9543 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-03-22T06:32:44.134Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-03-22T06:32:44.134Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-03-22T06:32:44.379Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-22T06:32:44.396Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/shareapy-a9543:testIamPermissions  
+
+[debug] [2020-03-22T06:32:45.513Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-22T06:32:45.516Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/shareapy-a9543  
+ 
+[debug] [2020-03-22T06:32:46.260Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'shareapy-a9543'...
+[info] 
+[info] i  deploying hosting
+[debug] [2020-03-22T06:32:46.265Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/shareapy-a9543/versions  
+
+[debug] [2020-03-22T06:32:48.556Z] <<< HTTP RESPONSE 200
+[info] i  hosting[shareapy-a9543]: beginning deploy...
+[info] i  hosting[shareapy-a9543]: found 22 files in dist/AdminShareapy
+[debug] [2020-03-22T06:32:48.586Z] [hosting] hash cache [ZGlzdC9BZG1pblNoYXJlYXB5] load error: lines is not defined

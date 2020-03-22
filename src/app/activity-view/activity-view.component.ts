@@ -1,14 +1,20 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivityInfo } from "../models/ActivityInfo";
 import { firestore } from "firebase";
-import { ActivatedRoute } from "@angular/router";
-import { switchMap, tap, map } from "rxjs/operators";
+import { ActivatedRoute, Router } from "@angular/router";
+import { tap, map, take } from "rxjs/operators";
 import { Observable, empty } from "rxjs";
+
 import {
   AngularFirestore,
   AngularFirestoreDocument
 } from "@angular/fire/firestore";
+import {
+  ConfirmDialogModel,
+  ConfirmDialogComponent
+} from "../confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material";
 const group = [
   "Family",
   "School",
@@ -19,16 +25,16 @@ const group = [
 ];
 
 const fake: ActivityInfo = {
-  id: "12345",
-  counselor: "string",
-  feedbackList: { "123": "1bad" },
-  ratingList: { bac: 3.5 },
-  registerList: ["123"],
-  bookmarkedList: ["123"],
+  id: "",
+  counselor: "",
+  feedbackList: {},
+  ratingList: {},
+  registerList: [],
+  bookmarkedList: [],
   time: firestore.Timestamp.fromDate(new Date()),
-  title: "string",
-  type: "Relationship",
-  url: "string"
+  title: "",
+  type: "",
+  url: ""
 };
 
 @Component({
@@ -53,15 +59,21 @@ export class ActivityViewComponent implements OnInit {
     id: new FormControl(""),
     bookmarkedList: new FormControl([])
   });
-  constructor(private afs: AngularFirestore, private route: ActivatedRoute) {}
+  constructor(
+    private afs: AngularFirestore,
+    private route: ActivatedRoute,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.route.paramMap
       .pipe(
+        take(1),
         map((value: any) => value.params.id),
         map(id => {
-          console.log(id);
           if (id) {
+            this.id = id;
             this.itemDoc = this.afs.doc<ActivityInfo>(`ActivityInfos/${id}`);
             return this.itemDoc.valueChanges();
           }
@@ -70,7 +82,10 @@ export class ActivityViewComponent implements OnInit {
         tap(doc => {
           if (doc.source) {
             doc.subscribe(value => {
-              this.activityForm.setValue(value);
+              this.activityForm.setValue({
+                ...value,
+                time: value ? value.time.toDate() : new Date()
+              });
             });
           }
         })
@@ -78,7 +93,61 @@ export class ActivityViewComponent implements OnInit {
       .subscribe();
   }
 
-  submit = () => {
-    console.log(this.activityForm.value);
+  submit = async () => {
+    try {
+      if (this.id) {
+        await this.itemDoc.update(this.getDirtyValues(this.activityForm));
+      } else {
+        let newActivity: ActivityInfo = this.activityForm.value;
+        const ref = await firestore()
+          .collection("ActivityInfos")
+          .doc();
+        newActivity.id = ref.id;
+        await ref.set(newActivity);
+      }
+      this.router.navigate(["activities"]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getDirtyValues(form: any) {
+    let dirtyValues = {};
+
+    Object.keys(form.controls).forEach(key => {
+      let currentControl = form.controls[key];
+
+      if (currentControl.dirty) {
+        if (currentControl.controls)
+          dirtyValues[key] = this.getDirtyValues(currentControl);
+        else dirtyValues[key] = currentControl.value;
+      }
+    });
+
+    return dirtyValues;
+  }
+
+  cancel = () => {
+    this.router.navigate(["activities"]);
+  };
+
+  deleteActivity = () => {
+    const message = `Are you sure you want to do delete?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(async dialogResult => {
+      if (dialogResult) {
+        try {
+          await this.itemDoc.delete();
+          this.router.navigate(["activities"]);
+        } catch (error) {
+          console.error("Error on deleting");
+        }
+      }
+    });
   };
 }

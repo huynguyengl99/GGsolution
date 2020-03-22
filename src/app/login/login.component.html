@@ -6,15 +6,20 @@
 
     <form class="example-form">
       <mat-card-content>
-        <mat-form-field class="example-full-width" >
-          <input matInput placeholder="Email" [formControl]="email"/>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Email" [formControl]="email" />
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Password" [formControl]="password"/>
+          <input matInput placeholder="Password" [formControl]="password" />
         </mat-form-field>
       </mat-card-content>
-      <button mat-stroked-button color="accent" class="btn-block" (click)="logIn()">
+      <button
+        mat-stroked-button
+        color="primary"
+        class="btn-block"
+        (click)="logIn()"
+      >
         Log in
       </button>
     </form>

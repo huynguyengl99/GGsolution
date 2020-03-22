@@ -17,14 +17,17 @@ import { AngularFireAuthGuardModule } from "@angular/fire/auth-guard";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { MatSortModule } from "@angular/material";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { ActivityViewComponent } from './activity-view/activity-view.component';
+import { ActivityViewComponent } from "./activity-view/activity-view.component";
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
+import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
     ActivityListComponent,
-    ActivityViewComponent
+    ActivityViewComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,8 @@ import { ActivityViewComponent } from './activity-view/activity-view.component';
     BrowserAnimationsModule,
     AngularMaterialModule,
     FormsModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
     ReactiveFormsModule,
     FontAwesomeModule,
     AngularFireAuthModule,
@@ -41,6 +46,7 @@ import { ActivityViewComponent } from './activity-view/activity-view.component';
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [AuthenticationService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ConfirmDialogComponent]
 })
 export class AppModule {}

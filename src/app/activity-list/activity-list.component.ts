@@ -43,6 +43,7 @@ export class ActivityListComponent implements OnInit {
       switch (property) {
         case "fromDate":
           return new Date(item.time.toDate()).getTime();
+        // return item.time.getTime();
         default:
           return item[property];
       }
@@ -55,5 +56,9 @@ export class ActivityListComponent implements OnInit {
 
   viewActivity(activity) {
     this.router.navigate(["activity", activity.id]);
+  }
+
+  addActivity() {
+    this.router.navigate(["activity"]);
   }
 }
