@@ -3,6 +3,7 @@ import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { ActivityInfo } from "../models/ActivityInfo";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+
 import {
   AngularFirestore,
   AngularFirestoreCollection
