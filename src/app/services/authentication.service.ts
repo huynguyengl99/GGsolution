@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class AuthenticationService {
   userData: Observable<firebase.User>;
@@ -46,6 +48,5 @@ export class AuthenticationService {
   /* Sign out */
   SignOut() {
     this.angularFireAuth.auth.signOut();
-    console.log("get there");
   }
 }

@@ -1,18 +1,20 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivityInfo } from "../models/ActivityInfo";
-import { firestore } from "firebase";
+import * as firebase from "firebase/app";
+import "firebase/firestore";
+
 import { ActivatedRoute, Router } from "@angular/router";
 import { tap, map, take } from "rxjs/operators";
 import { Observable, empty } from "rxjs";
 
 import {
   AngularFirestore,
-  AngularFirestoreDocument
+  AngularFirestoreDocument,
 } from "@angular/fire/firestore";
 import {
   ConfirmDialogModel,
-  ConfirmDialogComponent
+  ConfirmDialogComponent,
 } from "../confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material";
 const group = [
@@ -21,26 +23,15 @@ const group = [
   "Work",
   "Relationship",
   "Lifestyle",
-  "Other"
+  "Other",
 ];
 
-const fake: ActivityInfo = {
-  id: "",
-  counselor: "",
-  feedbackList: {},
-  ratingList: {},
-  registerList: [],
-  bookmarkedList: [],
-  time: firestore.Timestamp.fromDate(new Date()),
-  title: "",
-  type: "",
-  url: ""
-};
+const firestore = firebase.firestore;
 
 @Component({
   selector: "app-activity-view",
   templateUrl: "./activity-view.component.html",
-  styleUrls: ["./activity-view.component.scss"]
+  styleUrls: ["./activity-view.component.scss"],
 })
 export class ActivityViewComponent implements OnInit {
   private itemDoc: AngularFirestoreDocument<ActivityInfo>;
@@ -57,7 +48,7 @@ export class ActivityViewComponent implements OnInit {
     feedbackList: new FormControl({}),
     ratingList: new FormControl({}),
     id: new FormControl(""),
-    bookmarkedList: new FormControl([])
+    bookmarkedList: new FormControl([]),
   });
   constructor(
     private afs: AngularFirestore,
@@ -71,7 +62,7 @@ export class ActivityViewComponent implements OnInit {
       .pipe(
         take(1),
         map((value: any) => value.params.id),
-        map(id => {
+        map((id) => {
           if (id) {
             this.id = id;
             this.itemDoc = this.afs.doc<ActivityInfo>(`ActivityInfos/${id}`);
@@ -79,18 +70,21 @@ export class ActivityViewComponent implements OnInit {
           }
           return empty();
         }),
-        tap(doc => {
+        tap((doc) => {
           if (doc.source) {
-            doc.subscribe(value => {
-              this.activityForm.setValue({
-                ...value,
-                time: value ? value.time.toDate() : new Date()
-              });
+            doc.subscribe((value) => {
+              if (value) {
+                this.activityForm.setValue({
+                  ...value,
+                  time: value ? value.time.toDate() : new Date(),
+                });
+              }
             });
           }
         })
       )
-      .subscribe();
+      .subscribe()
+      .unsubscribe();
   }
 
   submit = async () => {
@@ -99,9 +93,7 @@ export class ActivityViewComponent implements OnInit {
         await this.itemDoc.update(this.getDirtyValues(this.activityForm));
       } else {
         let newActivity: ActivityInfo = this.activityForm.value;
-        const ref = await firestore()
-          .collection("ActivityInfos")
-          .doc();
+        const ref = await firestore().collection("ActivityInfos").doc();
         newActivity.id = ref.id;
         await ref.set(newActivity);
       }
@@ -114,7 +106,7 @@ export class ActivityViewComponent implements OnInit {
   getDirtyValues(form: any) {
     let dirtyValues = {};
 
-    Object.keys(form.controls).forEach(key => {
+    Object.keys(form.controls).forEach((key) => {
       let currentControl = form.controls[key];
 
       if (currentControl.dirty) {
@@ -136,16 +128,17 @@ export class ActivityViewComponent implements OnInit {
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
-      data: dialogData
+      data: dialogData,
     });
 
-    dialogRef.afterClosed().subscribe(async dialogResult => {
+    dialogRef.afterClosed().subscribe(async (dialogResult) => {
       if (dialogResult) {
         try {
           await this.itemDoc.delete();
           this.router.navigate(["activities"]);
         } catch (error) {
-          console.error("Error on deleting");
+          console.error("Error on deleting", error.message);
+          this.router.navigate(["activities"]);
         }
       }
     });
