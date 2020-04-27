@@ -13,15 +13,18 @@ export class AuthenticationService {
   }
 
   /* Sign up */
-  SignUp(email: string, password: string) {
-    this.angularFireAuth.auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(res => {
-        console.log("Successfully signed up!", res);
-      })
-      .catch(error => {
-        console.log("Something is wrong:", error.message);
-      });
+  async SignUp(email: string, password: string) {
+    try {
+      await this.angularFireAuth.auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+      return true;
+    } catch (error) {
+      console.log("Something is wrong:", error.message);
+      window.alert(error.message);
+      return false;
+    }
   }
 
   /* Sign in */
@@ -34,6 +37,8 @@ export class AuthenticationService {
       return true;
     } catch (error) {
       console.log("Something is wrong:", error.message);
+      window.alert(error.message);
+
       return false;
     }
   }

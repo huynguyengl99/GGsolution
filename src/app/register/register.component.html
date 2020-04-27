@@ -4,22 +4,64 @@
       <mat-card-title>Register</mat-card-title>
     </mat-card-header>
 
-    <form class="example-form">
-      <mat-card-content>
+    <form class="register-form" [formGroup]="registerForm">
+      <mat-card-content class="content-form">
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Username" />
+          <input matInput placeholder="Email" formControlName="email" />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Password" formControlName="password" />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Name" formControlName="name" />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Age" formControlName="age" />
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Email" />
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option [value]="type" *ngFor="let type of genderList"
+              >{{ type }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Password" />
+          <mat-label>Religious</mat-label>
+          <mat-select formControlName="religious">
+            <mat-option [value]="type" *ngFor="let type of booleanList"
+              >{{ type }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Spiritual</mat-label>
+          <mat-select formControlName="spiritual">
+            <mat-option [value]="type" *ngFor="let type of booleanList"
+              >{{ type }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Therapy</mat-label>
+          <mat-select formControlName="therapy">
+            <mat-option [value]="type" *ngFor="let type of booleanList"
+              >{{ type }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </mat-card-content>
 
-      <button mat-stroked-button color="primary" class="btn-block">
+      <button
+        mat-stroked-button
+        color="primary"
+        class="btn-block"
+        (click)="register()"
+      >
         Register
       </button>
     </form>

@@ -1,0 +1,17 @@
+.example-form {
+  display: flex;
+  flex-flow: row wrap;
+}
+.content-form {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  * {
+    width: 48%;
+    flex-basis: 48%;
+  }
+}
+
+.mat-input-element {
+  width: 100%;
+}
